@@ -5,7 +5,6 @@ import java.util.Base64
 import java.util.Objects
 import java.util.Random
 
-@OptIn(ExperimentalStdlibApi::class)
 data class FernetKey(
     val signingKey: ByteArray,
     val encryptionKey: ByteArray,
@@ -57,6 +56,7 @@ data class FernetKey(
             other.encryptionKey.contentEquals(encryptionKey)
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     override fun toString(): String {
         return "Key(${encode().toHexString()})"
     }
