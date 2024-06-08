@@ -25,7 +25,6 @@ object Fernet {
      * Decrypts the provided fernet token with the provided key.
      * If the `maxTokenAge` parameter is provided, a TTL check is performed and a `ExpiredFernetTokenException` is thrown in case of an expired token.
      *
-     *
      * @see FernetToken
      */
     fun decrypt(
