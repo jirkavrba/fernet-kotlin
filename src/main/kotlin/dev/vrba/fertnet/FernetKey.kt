@@ -6,7 +6,7 @@ import java.util.Objects
 import java.util.Random
 
 @OptIn(ExperimentalStdlibApi::class)
-class Key(
+class FernetKey(
     signingKey: ByteArray,
     encryptionKey: ByteArray,
 ) {
@@ -25,22 +25,22 @@ class Key(
         const val SIGNING_KEY_LENGTH_BYTES = 16
         const val ENCRYPTION_KEY_LENGTH_BYTES = 16
 
-        fun generate(random: Random = SecureRandom()): Key {
+        fun generate(random: Random = SecureRandom()): FernetKey {
             val signingKey = ByteArray(SIGNING_KEY_LENGTH_BYTES)
             val encryptionKey = ByteArray(ENCRYPTION_KEY_LENGTH_BYTES)
 
             random.nextBytes(signingKey)
             random.nextBytes(encryptionKey)
 
-            return Key(signingKey, encryptionKey)
+            return FernetKey(signingKey, encryptionKey)
         }
 
-        fun decode(encodedKey: ByteArray): Key {
+        fun decode(encodedKey: ByteArray): FernetKey {
             val decoded = Base64.getDecoder().decode(encodedKey)
             val signingKey = decoded.copyOfRange(0, SIGNING_KEY_LENGTH_BYTES)
             val encryptionKey = decoded.copyOfRange(SIGNING_KEY_LENGTH_BYTES, decoded.size)
 
-            return Key(signingKey, encryptionKey)
+            return FernetKey(signingKey, encryptionKey)
         }
     }
 
@@ -54,7 +54,7 @@ class Key(
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is Key &&
+        return other is FernetKey &&
             other.signingKey.contentEquals(signingKey) &&
             other.encryptionKey.contentEquals(encryptionKey)
     }

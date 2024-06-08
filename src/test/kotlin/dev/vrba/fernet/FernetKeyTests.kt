@@ -1,6 +1,6 @@
 package dev.vrba.fernet
 
-import dev.vrba.fertnet.Key
+import dev.vrba.fertnet.FernetKey
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -9,15 +9,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotSame
 
-class KeyTests {
+class FernetKeyTests {
     @Test
     fun `keys can be constructed using signing encryption parts`() {
-        val signingKey = ByteArray(Key.SIGNING_KEY_LENGTH_BYTES)
-        val encryptionKey = ByteArray(Key.ENCRYPTION_KEY_LENGTH_BYTES)
+        val signingKey = ByteArray(FernetKey.SIGNING_KEY_LENGTH_BYTES)
+        val encryptionKey = ByteArray(FernetKey.ENCRYPTION_KEY_LENGTH_BYTES)
 
         assertDoesNotThrow {
-            val first = Key(signingKey, encryptionKey)
-            val second = Key(signingKey, encryptionKey)
+            val first = FernetKey(signingKey, encryptionKey)
+            val second = FernetKey(signingKey, encryptionKey)
 
             assertNotSame(first, second)
             assertEquals(first, second)
@@ -26,21 +26,21 @@ class KeyTests {
 
     @Test
     fun `keys should validate signing key size when constructed`() {
-        val encryptionKey = ByteArray(Key.ENCRYPTION_KEY_LENGTH_BYTES)
+        val encryptionKey = ByteArray(FernetKey.ENCRYPTION_KEY_LENGTH_BYTES)
 
         assertThrows<IllegalArgumentException> {
-            val tooLong = ByteArray(Key.SIGNING_KEY_LENGTH_BYTES + 1)
+            val tooLong = ByteArray(FernetKey.SIGNING_KEY_LENGTH_BYTES + 1)
 
-            Key(
+            FernetKey(
                 signingKey = tooLong,
                 encryptionKey = encryptionKey,
             )
         }
 
         assertThrows<IllegalArgumentException> {
-            val tooShort = ByteArray(Key.SIGNING_KEY_LENGTH_BYTES - 1)
+            val tooShort = ByteArray(FernetKey.SIGNING_KEY_LENGTH_BYTES - 1)
 
-            Key(
+            FernetKey(
                 signingKey = tooShort,
                 encryptionKey = encryptionKey,
             )
@@ -49,21 +49,21 @@ class KeyTests {
 
     @Test
     fun `keys should validate encryption key size when constructed`() {
-        val signingKey = ByteArray(Key.SIGNING_KEY_LENGTH_BYTES)
+        val signingKey = ByteArray(FernetKey.SIGNING_KEY_LENGTH_BYTES)
 
         assertThrows<IllegalArgumentException> {
-            val tooLong = ByteArray(Key.ENCRYPTION_KEY_LENGTH_BYTES + 1)
+            val tooLong = ByteArray(FernetKey.ENCRYPTION_KEY_LENGTH_BYTES + 1)
 
-            Key(
+            FernetKey(
                 signingKey = signingKey,
                 encryptionKey = tooLong,
             )
         }
 
         assertThrows<IllegalArgumentException> {
-            val tooShort = ByteArray(Key.ENCRYPTION_KEY_LENGTH_BYTES - 1)
+            val tooShort = ByteArray(FernetKey.ENCRYPTION_KEY_LENGTH_BYTES - 1)
 
-            Key(
+            FernetKey(
                 signingKey = signingKey,
                 encryptionKey = tooShort,
             )
@@ -72,16 +72,16 @@ class KeyTests {
 
     @Test
     fun `keys should be generated randomly by default`() {
-        val first = Key.generate()
-        val second = Key.generate()
+        val first = FernetKey.generate()
+        val second = FernetKey.generate()
 
         assertNotEquals(first, second)
     }
 
     @Test
     fun `keys can be generated with a provided random`() {
-        val first = Key.generate(Random(0))
-        val second = Key.generate(Random(0))
+        val first = FernetKey.generate(Random(0))
+        val second = FernetKey.generate(Random(0))
 
         assertNotSame(first, second)
         assertEquals(first, second)
@@ -89,9 +89,9 @@ class KeyTests {
 
     @Test
     fun `keys can be encoded to and decoded from base64`() {
-        val key = Key.generate()
+        val key = FernetKey.generate()
         val encoded = key.encode()
-        val decoded = Key.decode(encoded)
+        val decoded = FernetKey.decode(encoded)
 
         assertNotSame(key, decoded)
         assertEquals(key, decoded)

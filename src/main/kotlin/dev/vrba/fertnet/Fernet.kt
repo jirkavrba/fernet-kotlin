@@ -1,8 +1,8 @@
 package dev.vrba.fertnet
 
-import java.security.SecureRandom
-import java.util.Random
-
 object Fernet {
-    fun generateKey(random: Random = SecureRandom()): Key = Key.generate(random)
+    /**
+     * Generates a new Fernet key that can be used to encrypt and decrypt messages.
+     */
+    fun generateKey(): FernetKey = FernetKey.generate()
 }
