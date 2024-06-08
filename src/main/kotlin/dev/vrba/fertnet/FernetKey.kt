@@ -6,12 +6,10 @@ import java.util.Objects
 import java.util.Random
 
 @OptIn(ExperimentalStdlibApi::class)
-class FernetKey(
-    signingKey: ByteArray,
-    encryptionKey: ByteArray,
+data class FernetKey(
+    val signingKey: ByteArray,
+    val encryptionKey: ByteArray,
 ) {
-    private val signingKey: ByteArray = signingKey.copyOf()
-    private val encryptionKey: ByteArray = encryptionKey.copyOf()
     private val encodedBase64: ByteArray by lazy {
         Base64.getEncoder().encode(signingKey.copyOf() + encryptionKey.copyOf())
     }
