@@ -2,6 +2,7 @@ package dev.vrba.fertnet
 
 import java.security.SecureRandom
 import java.util.Base64
+import java.util.Objects
 import java.util.Random
 
 @OptIn(ExperimentalStdlibApi::class)
@@ -44,6 +45,13 @@ class Key(
     }
 
     fun encode(): ByteArray = encodedBase64
+
+    override fun hashCode(): Int {
+        return Objects.hash(
+            signingKey,
+            encryptionKey,
+        )
+    }
 
     override fun equals(other: Any?): Boolean {
         return other is Key &&
